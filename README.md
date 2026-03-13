@@ -48,6 +48,6 @@ This contains some example analysis could be done for phylogenomic research with
 - Mantel and partial Mantel test (to test isolation by distance accounting for spatial autocorrelation)
 - OUTFLANK (to detect outliers that may have adaptive potential)
 <br>
-To prepare, despite respective R packages listed at the start of each file, you will need:
+## To prepare, despite respective R packages listed at the start of each file, you will need:
 - The population file used in raw data processing (including different levels of population if applicable, such as regions, subregions, sites etc.)
 - Sample location file that has coorinates in Decimal Degrees format
