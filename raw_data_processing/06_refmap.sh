@@ -6,30 +6,22 @@
 #SBATCH --output Refmap.%j.out # CHANGE each run
 #SBATCH --error Refmap.%j.err # CHANGE each run
 
-echo "load Stacks, start NZ"
-#remember to discard file size smaller than 50,000kb
 module purge
 module load Stacks # Cluster specific
-ref_map.pl --samples /nesi/project/uoo03773/ALL3/Bam --popmap /nesi/project/uoo03773/ALL3/NZ_bfref.txt -T 8 -o /nesi/project/uoo03773/ALL3/NZmap
 
-echo "finished mapping NZ, make population vcf"
+###remember to quality check all the bam files. I usually discard file sizes <50,000kb, then need to create a cleaned population file too
+###create dictionary Map & Clean
+###the parameters are pretty self-explanatory, and generally rule of thumb
+#-p minimum number of populations
+#-r minimum percentage of individuals in a population required to process a locus for that population
+#--min-maf: minimum minor allele frequency
 
-populations -P /nesi/project/uoo03773/ALL3/NZmap  -M /nesi/project/uoo03773/ALL3/NZ_bfref.txt  --vcf -p 2 -r 0.2 -O /nesi/project/uoo03773/ALL3/NZClean --vcf --min-maf 0.2 
+echo "start SNP calling"
 
-echo "done NZ, start FL"
+ref_map.pl --samples /nesi/project/uoo03773/ALL3/Bam --popmap /nesi/project/uoo03773/ALL3/cleaned_pop.txt -T 8 -o /nesi/project/uoo03773/ALL3/Map
 
-ref_map.pl --samples /nesi/project/uoo03773/ALL3/Bam --popmap /nesi/project/uoo03773/ALL3/FL_bfref.txt -T 8 -o /nesi/project/uoo03773/ALL3/FLmap
+echo "finished calling, make population vcf"
 
-echo "finished mapping FL, make population vcf"
+populations -P /nesi/project/uoo03773/ALL3/Map  -M /nesi/project/uoo03773/ALL3/cleaned_pop.txt  --vcf -p 2 -r 0.2 -O /nesi/project/uoo03773/ALL3/AUClean --vcf --min-maf 0.2
 
-populations -P /nesi/project/uoo03773/ALL3/FLmap  -M /nesi/project/uoo03773/ALL3/FL_bfref.txt  --vcf -p 2 -r 0.2 -O /nesi/project/uoo03773/ALL3/FLClean --vcf --min-maf 0.2 
-
-echo "done FL, start AU"
-
-ref_map.pl --samples /nesi/project/uoo03773/ALL3/Bam --popmap /nesi/project/uoo03773/ALL3/AU_bfref.txt -T 8 -o /nesi/project/uoo03773/ALL3/AUmap
-
-echo "finished mapping AU, make population vcf"
-
-populations -P /nesi/project/uoo03773/ALL3/AUmap  -M /nesi/project/uoo03773/ALL3/AU_bfref.txt  --vcf -p 2 -r 0.2 -O /nesi/project/uoo03773/ALL3/AUClean --vcf --min-maf 0.2
-
-echo "done AU, job done"
+echo "job done"
