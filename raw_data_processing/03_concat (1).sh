@@ -7,6 +7,7 @@
 #SBATCH --output Concat.%j.out # CHANGE each run
 #SBATCH --error Concat.%j.err # CHANGE each run
 
+###This script just submit the python script to batch jobs, need to edit the original python file
 python /nesi/project/uoo03773/03_concat.py
 
 echo "done"
