@@ -9,6 +9,12 @@
 
 module load cutadapt/4.4-gimkl-2022a-Python-3.11.3
 
+#-o forward out dictionary
+#-p reverse out dictionary
+###make sure input forward (R1) first and reverse (R2) second
+#Discard reads shorter than LEN. If LEN2 is given for paired-end data, it is applied to R2
+#-q Quality trimming
+
 cd /nesi/project/uoo03773/NZFL2
 
 echo "start lane1"
