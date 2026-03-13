@@ -17,7 +17,7 @@ Prepare:
 - a pop.txt file that matches individuals to their respective populations
 - A reference genome (if available)
 <br>
-Packages used: <br>
+Packages used:
 - Stacks2: https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.12775. Manual: https://catchenlab.life.illinois.edu/stacks/manual/ <br>
 - Cutadapt: https://journal.embnet.org/index.php/embnetjournal/article/view/200/479. Manual: https://cutadapt.readthedocs.io/en/stable/ <br>
 - BWA: https://academic.oup.com/bioinformatics/article/25/14/1754/225615. Manual: https://bio-bwa.sourceforge.net/bwa.shtml <br>
