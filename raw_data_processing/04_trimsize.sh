@@ -7,6 +7,11 @@
 #SBATCH --error TrimSize.%j.err # CHANGE each run
 
 module load cutadapt/4.4-gimkl-2022a-Python-3.11.3
+###make sure to QC before trimming to get a sense of the mean sequence length
+#-l trim length
+#-o output name
+#-m minimum length
+#-j number of threads
 
 cd /nesi/project/uoo03773/GBS/Trim
 
