@@ -5,10 +5,10 @@ I would appretiate acknowledgement or citation (once the manuscipt is accepted w
 <br><br>
 ## Before analyses
 - Genetic extractions and GBS library preparations steps are not described here, as they are subject to individual protocols and species. Deails for our preparations will be uploaded once the manuscript is accepted.
-- Sequencing: for reference, we used Illumina NextSeq 2000 with 150 bp paired-end reads at the Otago Genomics Facility (University of Otago, New Zealand).
+- Sequencing: I used Illumina NextSeq 2000 with 150 bp paired-end reads at the Otago Genomics Facility (University of Otago, New Zealand).
 <br><br>
 ## Process of raw data
-As we used customised adapter plates, raw reads need to be cleaned and demultiplexed. <br>
+As I used customised adapter plates, raw reads need to be cleaned and demultiplexed. <br>
 All codes were writen as batch jobs submitted to New Zealand eScience Infrastructure (NeSI), therefore users need to adapt them for their own use
 
 ### Prepare: 
