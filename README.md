@@ -34,7 +34,7 @@ All codes were writen as batch jobs submitted to New Zealand eScience Infrastruc
 - 06_refmap.sh: SNP calling
 - 07_SNP_filter: there are a lot of methods to filter SNPs including using Stacks or R packages. A reference code using Stacks is included.<br>
 But I mostly used "SNPfiltR" package (https://onlinelibrary.wiley.com/doi/10.1111/1755-0998.13618) as it's interactive and visualises different parameters. It has very detailed step-by-step guide on its website (https://devonderaad.github.io/SNPfiltR/). <br>
-I only changes some parameters tailored to my SNP data. Therefore detailed R scripts not attached here. My filtering informatio can be found in the manuscipt once accepted.
+I only changes some parameters tailored to my SNP data. Therefore detailed R scripts not attached here. My filtering information can be found in the manuscipt once accepted.
 
 ## Phylogenomic analysis
 This contains some example analysis could be done for phylogenomic research with SNP data, including 
