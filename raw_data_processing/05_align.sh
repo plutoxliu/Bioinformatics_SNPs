@@ -12,6 +12,7 @@ echo "load index"
 bwa index Macro_genome.fna
 echo "SNP call"
 
+#I just copy and paste individual sample names here
 files="16m1
 16m10
 16m2
@@ -536,9 +537,13 @@ MQ.1.3
 MQ.1.4
 MQ.1.5
 "
-
+#source dictionary
 src=/nesi/project/uoo03773/GBS/ReTrim/
+
+#reference genome file (if there is no reference genome check bwa manual for de novo alignment)
 bwa_db=Macro_genome.fna
+
+#align to genome
 for sample in $files
 do 
     bwa mem -t 8 $bwa_db $src/${sample}.trim.fq.gz  |   samtools view -b | samtools sort --threads 4 > ${sample}.bam
