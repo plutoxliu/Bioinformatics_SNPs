@@ -41,7 +41,6 @@ This contains some example analysis could be done for phylogenomic research with
 - SNP missingness and depth information
 - PCA
 - Neighbor-joining tree
-- Maximum likelihood tree
 - Structure (admixture) analysis
 - DAPC
 - Basic diversity indices
