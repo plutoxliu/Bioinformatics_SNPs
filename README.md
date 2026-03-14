@@ -50,4 +50,4 @@ This contains some example analysis could be done for phylogenomic research with
 
 ### To prepare, despite respective R packages listed at the start of each file, you will need:
 - The population file used in raw data processing (including different levels of population if applicable, such as regions, subregions, sites etc.)
-- Sample location file that has coorinates in Decimal Degrees format
+- Sample location file that has coordinates in Decimal Degrees format
