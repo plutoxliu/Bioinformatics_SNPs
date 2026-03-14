@@ -26,13 +26,20 @@ All codes were writen as batch jobs submitted to New Zealand eScience Infrastruc
 - MultiQC: https://docs.seqera.io/multiqc
 
 ### Steps:
-- 01_cut.sh: remove Illumina adapters and poly-G sequences
-- 02_demulti.sh: Demultiplexing
-- 03_concat.py: concatenate forward and reverse reads into one file for each individual sample
-- 04_trimsize.sh: trim sequences to desired length, usually need to use fastqc and multiqc before to check qualities etc. before performing this step
-- 05_align.sh: algin sequences to a provided reference genome, after this step needs to clean up low quality samples, the easiest way is to check file size, but can also use Stacks
-- 06_refmap.sh: SNP calling
-- 07_SNP_filter: there are a lot of methods to filter SNPs including using Stacks or R packages. A reference code using Stacks is included.<br>
+#### 01_cut.sh 
+remove Illumina adapters and poly-G sequences
+#### 02_demulti.sh 
+Demultiplexing
+#### 03_concat.py
+concatenate forward and reverse reads into one file for each individual sample
+#### 04_trimsize.sh
+trim sequences to desired length, usually need to use fastqc and multiqc before to check qualities etc. before performing this step
+#### 05_align.sh
+algin sequences to a provided reference genome, after this step needs to clean up low quality samples, the easiest way is to check file size, but can also use Stacks
+#### 06_refmap.sh
+SNP calling
+#### 07_SNP_filter
+there are a lot of methods to filter SNPs including using Stacks or R packages. A reference code using Stacks is included.<br>
 But I mostly used "SNPfiltR" package (https://onlinelibrary.wiley.com/doi/10.1111/1755-0998.13618) as it's interactive and visualises different parameters. It has very detailed step-by-step guide on its website (https://devonderaad.github.io/SNPfiltR/). <br>
 I only changes some parameters tailored to my SNP data. Therefore detailed R scripts not attached here. My filtering information can be found in the manuscipt once accepted.
 
