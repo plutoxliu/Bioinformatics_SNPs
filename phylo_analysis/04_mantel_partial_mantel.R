@@ -1,13 +1,13 @@
 ################################################################################
 ##                                                                            ##
-##        POPULATION GENOMICS — MANTEL & PARTIAL MANTEL TESTS                ##
+##        POPULATION GENOMICS — MANTEL & PARTIAL MANTEL TESTS                 ##
 ##                                                                            ##
 ##  Sections:                                                                 ##
-##   13.  Mantel Test (Isolation by Distance)                                ##
-##   14.  Partial Mantel Test (IBD controlling for sampling density)         ##
+##   1.  Mantel Test (Isolation by Distance)                                  ##
+##   2.  Partial Mantel Test (IBD controlling for sampling density)           ##
 ##                                                                            ##
-##  Requires objects from 01_data_QC_diversity.R:                            ##
-##    vcf, GBS, samples, D.ind, D.pop, D.ind.dist, D.pop.dist               ##
+##  Requires objects from 01_data_QC_diversity.R:                             ##
+##    vcf, GBS, samples, D.ind, D.pop, D.ind.dist, D.pop.dist                 ##
 ##                                                                            ##
 ################################################################################
 
@@ -48,12 +48,18 @@ GBS_genind@pop
 
 # Load site coordinates file
 # Expected columns: Site, Region, Lat, Long
-coor <- read.csv("Sample_coor.csv", header = TRUE)
+coor <- read.csv("coor.csv", header = TRUE)
 coor <- coor %>%
   filter(!duplicated(Site)) %>%
-  select(Site, Region, Lat, Long)
+  dplyr::select(Region, 
+                Site, 
+                Lat, 
+                Lon)
 
 # Join coordinates onto the sample metadata table
+samples$Site<-toupper(samples$Site)
+coor$Site<-toupper(coor$Site)
+
 pop_geo  <- left_join(samples, coor, by = "Site")
 
 gidtable <- data.frame(subpops = pop_geo$Site, pops = pop_geo$Region)
@@ -68,16 +74,26 @@ region_mean <- coor %>%
 
 gidtable <- left_join(gidtable, region_mean, by = "Region")
 
-# Attach coordinates to the genind object
-GBS_genind@other$xy           <- cbind(gidtable$Long, gidtable$Lat)
-rownames(GBS_genind@other$xy) <- gidtable$pops
+# Attach individual-level coordinates to the genind object (one row per individual)
+GBS_genind@other$xy           <- cbind(x=gidtable$Lon, y=gidtable$Lat)
+rownames(GBS_genind@other$xy) <- gidtable$subpops
 
-# Confirm row order matches between the coordinate and distance matrices
-rownames(GBS_genind@other$xy)
-rownames(D.pop)
+#Site-level coordinate table (one row per site, in the same order as D.pop)
+rownames(D.pop) <- str_to_upper(rownames(D.pop))
+site_coords <- coor %>%
+  mutate(Site = str_to_upper(Site)) %>%
+  filter(Site %in% rownames(D.pop)) %>%          # keep only sites in your genetic matrix
+  arrange(match(Site, rownames(D.pop))) %>%       # enforce same order as D.pop
+  dplyr::select(Site, Lon, Lat)
 
-# Geographic distance matrix
-Dgeo <- dist(GBS_genind$other$xy)
+# Confirm order matches genetic distance matrix
+stopifnot(all(site_coords$Site == rownames(D.pop)))
+
+# Geographic distance matrix (site × site)
+xy_mat <- as.matrix(dplyr::select(site_coords, Lon, Lat))
+rownames(xy_mat) <- site_coords$Site
+
+Dgeo <- dist(xy_mat)
 
 # ------------------------------------------------------------------------------
 # 13b. Mantel test
@@ -116,10 +132,13 @@ title("Correlation of Genetic and Geographical Distances")
 # 14a. Attach individual-level coordinates to genind and convert to genlight
 # ------------------------------------------------------------------------------
 
-GBS_genind@other$xy           <- cbind(pop_geo$Long, pop_geo$Lat)
+GBS_genind@other$xy           <- cbind(x=pop_geo$Lon, y=pop_geo$Lat)
 rownames(GBS_genind@other$xy) <- pop_geo$Site
+pop_geo$Region<-as.factor(pop_geo$Region)
+pop_geo$Site<-as.factor(pop_geo$Site)
 GBS@pop  <- pop_geo$Site
 pop(GBS) <- GBS@pop
+pop(GBS)
 
 GBS_gl <- gi2gl(GBS_genind)   # convert genind → genlight
 
@@ -218,12 +237,13 @@ p_ibd <- ggplot(df_ibd, aes(x = GeoDist, y = GenDist)) +
   theme_minimal() +
   labs(
     title    = "IBD Scatterplot with KDE Density Contours (by site)",
-    subtitle = "Partial Mantel r = 0.5065 (p < 0.001)",   # update after running
+    subtitle = "Partial Mantel r = 0.249 (p = 0.170)",   # update after running
     x        = "Geographic Distance",
     y        = "Genetic Distance",
     fill     = "Pair Density"
   )
 
+p_ibd
 ggsave(plot = p_ibd, "IBD_KDE_site.png",
        width = 8, height = 6, dpi = 300)
 

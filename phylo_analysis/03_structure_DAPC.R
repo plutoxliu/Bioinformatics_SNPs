@@ -1,13 +1,13 @@
 ################################################################################
 ##                                                                            ##
-##          POPULATION GENOMICS — STRUCTURE ANALYSIS & DAPC                  ##
+##          POPULATION GENOMICS — STRUCTURE ANALYSIS & DAPC                   ##
 ##                                                                            ##
 ##  Sections:                                                                 ##
-##   10.  Structure Analysis (LEA / sNMF)                                    ##
-##   11.  DAPC (Discriminant Analysis of Principal Components)               ##
+##   1.  Structure Analysis (LEA / sNMF)                                      ##
+##   2.  DAPC (Discriminant Analysis of Principal Components)                 ##
 ##                                                                            ##
-##  Requires objects from 01_data_QC_diversity.R:                            ##
-##    vcf, GBS, samples                                                      ##
+##  Requires objects from 01_data_QC_diversity.R:                             ##
+##    vcf, GBS, samples                                                       ##
 ##                                                                            ##
 ################################################################################
 
@@ -28,12 +28,11 @@ library(ggpubr)
 
 
 # Shared colour palette for populations — used across both sections
-palette_pop2 <- c("#FF6E00", "#33a02c", "#a6cee3", "#fb9a99",
-                  "#FF0000", "#6a3d9a", "#0072B2", "#56B4E9", "#F0E442")
+palette_pop2 <- c("#e31a1c", "#33a02c", "#0072B2", "#fb9a99", "#F0E442","#6a3d9a","#b2df8a", "#56B4E9", "#ff7f00",  "#a6cee3")
 
 
 ################################################################################
-# SECTION 10: STRUCTURE ANALYSIS (LEA / sNMF)
+# SECTION 1: STRUCTURE ANALYSIS (LEA / sNMF)
 ################################################################################
 
 # LEA's sNMF requires a .geno file where genotypes are encoded as:
@@ -68,7 +67,7 @@ geno <- tidy_geno %>%
   pivot_wider(names_from = Indiv, values_from = geno_code) %>%
   select(-Key)
 
-write.table(geno, "noAUSgeno.geno",
+write.table(geno, "SARGgeno.geno",
             col.names = FALSE, row.names = FALSE, sep = "")
 
 # ------------------------------------------------------------------------------
@@ -78,10 +77,10 @@ write.table(geno, "noAUSgeno.geno",
 # ------------------------------------------------------------------------------
 
 vcf_snmf <- snmf(
-  input.file  = "noAUSgeno.geno",
+  input.file  = "SARGgeno.geno",
   K           = 1:10,
   entropy     = TRUE,
-  repetitions = 10,
+  repetitions = 20,
   project     = "new",
   alpha       = 1000
 )
@@ -91,7 +90,7 @@ plot(vcf_snmf, cex = 1.2, col = "lightblue", pch = 19)
 
 # Select the run with the lowest cross-entropy for the chosen K
 # NOTE: Adjust chosen_K based on the cross-entropy plot above
-chosen_K <- 9
+chosen_K <- 3
 ce       <- cross.entropy(vcf_snmf, K = chosen_K)
 best_run <- which.min(ce)
 best_run
@@ -100,16 +99,16 @@ best_run
 # 10c. Extract Q-matrix and prepare for plotting
 # Each row is an individual; each column is an ancestral population (cluster)
 # ------------------------------------------------------------------------------
-
+pop<-samples
 q_mat           <- LEA::Q(vcf_snmf, K = chosen_K, run = best_run)
 colnames(q_mat) <- paste0("P", seq_len(chosen_K))
 
 q_df <- q_mat %>%
   as_tibble() %>%
   mutate(
-    individual = pop$individual,
-    region     = pop$Subregion,
-    order      = pop$Subregion   # controls plot ordering
+    individual = pop$Individual,
+    region     = pop$Region,
+    order      = pop$Region   # controls plot ordering
   )
 
 # Convert to long format for ggplot
@@ -127,8 +126,6 @@ q_df_prates <- q_df_long %>%
 # 10d. Pie charts – mean admixture proportion per region
 # ------------------------------------------------------------------------------
 
-q_df_prates$subregion <- paste(q_df_prates$order, q_df_prates$region, sep = "_")
-
 q_df_pie <- q_df_prates %>%
   group_by(region, pop) %>%
   summarise(mean = mean(q), .groups = "drop")
@@ -141,6 +138,7 @@ ggplot(q_df_pie,
   scale_fill_manual(values = palette_pop2) +
   theme_void()
 
+ggsave("pies.pdf", device = "pdf", width = 12, height = 6, bg = "transparent")
 # ------------------------------------------------------------------------------
 # 10e. Admixture bar plot (STRUCTURE-style)
 # ------------------------------------------------------------------------------
@@ -166,7 +164,7 @@ p_admix
 
 
 ################################################################################
-# SECTION 11: DAPC (DISCRIMINANT ANALYSIS OF PRINCIPAL COMPONENTS)
+# SECTION 2: DAPC (DISCRIMINANT ANALYSIS OF PRINCIPAL COMPONENTS)
 ################################################################################
 
 # ------------------------------------------------------------------------------

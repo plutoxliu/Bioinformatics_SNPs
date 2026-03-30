@@ -1,13 +1,13 @@
 ################################################################################
 ##                                                                            ##
-##                POPULATION GENOMICS — PCA & AMOVA                          ##
+##                POPULATION GENOMICS — PCA & AMOVA                           ##
 ##                                                                            ##
 ##  Sections:                                                                 ##
-##    9.  Principal Components Analysis (PCA)                                 ##
-##   12.  AMOVA (Analysis of Molecular Variance)                             ##
+##    1.  Principal Components Analysis (PCA)                                 ##
+##    2.  AMOVA (Analysis of Molecular Variance)                              ##
 ##                                                                            ##
-##  Requires objects from 01_data_QC_diversity.R:                            ##
-##    vcf, GBS, samples, D.ind, D.pop                                        ##
+##  Requires objects from 01_data_QC_diversity.R:                             ##
+##    vcf, GBS, samples, D.ind, D.pop                                         ##
 ##                                                                            ##
 ################################################################################
 
@@ -24,7 +24,7 @@ library(gplots)    # for heatmap.2
 
 
 ################################################################################
-# SECTION 9: PRINCIPAL COMPONENTS ANALYSIS (PCA)
+# SECTION 1: PRINCIPAL COMPONENTS ANALYSIS (PCA)
 ################################################################################
 
 # ------------------------------------------------------------------------------
@@ -32,7 +32,7 @@ library(gplots)    # for heatmap.2
 # Run a first PCA with more PCs to decide how many to retain
 # ------------------------------------------------------------------------------
 
-data_pca <- glPca(GBS, nf = 4)
+data_pca <- glPca(GBS, nf = 3)
 
 # NOTE: If "NAs detected" error appears, uncomment and run the block below:
 # toRemove <- is.na(glMean(GBS, alleleAsUnit = FALSE))
@@ -43,7 +43,7 @@ data_pca <- glPca(GBS, nf = 4)
 eig.val  <- data_pca$eig
 eig.perc <- 100 * data_pca$eig / sum(data_pca$eig)
 eigen    <- data.frame(eig.val, eig.perc)
-eigen
+head(eigen)
 # write.csv(eigen, "eigen-summary.csv", row.names = TRUE, quote = FALSE)
 
 # Scree plot – use this to decide how many PCs to retain below
@@ -64,8 +64,7 @@ pca1 <- glPca(GBS, nf = 3)
 scatter(pca1, ratio = 0.2)
 
 # Colour palette for populations
-palette_pop2 <- c("#FF6E00", "#33a02c", "#a6cee3", "#fb9a99",
-                  "#FF0000", "#6a3d9a", "#0072B2", "#56B4E9", "#F0E442")
+palette_pop2 <- c("#e31a1c", "#33a02c", "#0072B2", "#fb9a99", "#F0E442","#6a3d9a","#b2df8a", "#56B4E9", "#ff7f00",  "#a6cee3")
 
 # Population-level scatter with confidence ellipses
 s.class(pca1$scores, fac = GBS$pop, col = palette_pop2)
@@ -82,7 +81,7 @@ palette_ind <- rep_len(
   c("#FF0000", "#FF6E00", "#FFC300", "#FFFF00", "#AAD500",
     "#008000", "#005555", "#0000FF", "#3200AC", "#4B0082",
     "#812BA6", "#B857CA", "#D03A87"),
-  146
+  286
 )
 
 # PC1 vs PC2
@@ -108,7 +107,7 @@ ggplot(pca_scores, aes(PC1, PC3)) +
 
 
 ################################################################################
-# SECTION 12: AMOVA (ANALYSIS OF MOLECULAR VARIANCE)
+# SECTION 2: AMOVA (ANALYSIS OF MOLECULAR VARIANCE)
 ################################################################################
 
 # Reset population to Region level

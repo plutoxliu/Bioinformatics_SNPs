@@ -44,8 +44,7 @@ library(SNPRelate)   # required for snpgdsOpen / snpgdsFst
 # ------------------------------------------------------------------------------
 # Read VCF and convert to genlight
 # ------------------------------------------------------------------------------
-
-vcf <- read.vcfR("RE50.vcf")
+vcf <- read.vcfR("filteredSARG.vcf")
 
 head(vcf)
 head(getFIX(vcf))
@@ -62,8 +61,8 @@ length(GBS@ind.names)   # check number of individuals loaded
 
 samples <- data.frame(GBS@ind.names)
 samples$Individual <- samples$GBS.ind.names
-samples$Region     <- word(samples$Individual, 1, sep = "_")   # first field
-samples$Site       <- word(samples$Individual, 2, sep = "_")   # second field
+samples$Region     <- word(samples$Individual, 1, sep = "\\.")   # first field
+samples$Site       <- word(samples$Individual, 1, sep = "\\.")   # second field
 
 samples$Region <- as.factor(samples$Region)
 samples$Site   <- as.factor(samples$Site)
@@ -104,7 +103,7 @@ palette_depth <- rep_len(
   c("#FF0000", "#FF6E00", "#FFC300", "#FFFF00", "#AAD500",
     "#008000", "#005555", "#0000FF", "#3200AC", "#4B0082",
     "#812BA6", "#B857CA", "#D03A87"),
-  349
+  279
 )
 
 # Boxplot of depth per sample on a log2 scale
@@ -125,7 +124,7 @@ ggplot(dpf, aes(x = Sample, y = Depth)) +
     panel.grid.major.y = element_line(color = "#A9A9A9", linewidth = 0.6),
     panel.grid.minor.y = element_line(color = "#C0C0C0", linewidth = 0.2)
   )
-
+ggsave("depth.png",width = 15, height = 6, units = "in", bg = NULL)
 
 ################################################################################
 # SECTION 3: MISSINGNESS PER SAMPLE
@@ -149,7 +148,7 @@ ggplot(myMiss, aes(x = Sample, y = Missing)) +
   ) +
   scale_y_continuous(expand = c(0, 0))
 
-
+ggsave("missing.png",width = 15, height = 6, units = "in", bg = NULL)
 ################################################################################
 # SECTION 4: GDS FILE CREATION & DIVERSITY METRICS SETUP
 ################################################################################
@@ -220,6 +219,7 @@ summary(fst_result$FstSNP)  # Per-SNP Fst distribution
 
 snpgdsClose(GDS)   # Always close the GDS connection when finished
 
+
 # ------------------------------------------------------------------------------
 # 5b. Pairwise Fst / Nei's distance among populations (StAMPP)
 # ------------------------------------------------------------------------------
@@ -251,7 +251,10 @@ GBS   # print summary
 
 # Observed and expected heterozygosity by population and by individual
 gl.report.heterozygosity(GBS, method = "pop")
+ggsave("He_pop.png", width = 12, height = 6, units = "in", bg = NULL)
+
 gl.report.heterozygosity(GBS, method = "ind")
+ggsave("He_ind.png", width = 12, height = 6, units = "in", bg = NULL)
 
 # General diversity indices (Hill numbers: D0, D1, D2)
 # Run first at the Region level, then at the Site level
@@ -338,7 +341,7 @@ palette_tree <- rep_len(
   c("#FF0000", "#FF6E00", "#FFC300", "#FFFF00", "#AAD500",
     "#008000", "#005555", "#0000FF", "#3200AC", "#4B0082",
     "#812BA6", "#B857CA", "#D03A87"),
-  6
+  10
 )
 palette_pop <- c("#FF0000", "#AAD500", "#0000FF",
                  "#812BA6", "#FFFF00", "#005555")
