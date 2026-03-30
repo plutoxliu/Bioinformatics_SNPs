@@ -1,5 +1,5 @@
 ## Overview
-This repository contains detailed steps to analyse Genotyping-by-Sequencing (GBS) data, optimised for kelps.<br>
+This repository contains detailed steps to analyse Genotyping-by-Sequencing (GBS) data.<br>
 For usage please see detailed comments in each file <br>
 I would appretiate acknowledgement or citation (once the manuscipt is accepted will be mentioned here) if using this repository
 <br><br>
