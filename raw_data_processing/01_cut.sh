@@ -14,6 +14,8 @@ module load cutadapt/4.4-gimkl-2022a-Python-3.11.3
 ###make sure input forward (R1) first and reverse (R2) second
 #Discard reads shorter than LEN. If LEN2 is given for paired-end data, it is applied to R2
 #-q Quality trimming
+#the following code follow this format: -a -A -j -o -p "forward sequence file" "reverse sequence file" -m -q
+#note the input files doesn't have a flag before them, the code automatically recognise two input files as forward and reverse sequences, so don't mix up the order
 
 cd /nesi/project/uoo03773/NZFL2
 
