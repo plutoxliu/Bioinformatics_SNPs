@@ -23,7 +23,7 @@ files="16m1
 #source dictionary
 src=/nesi/project/uoo03773/GBS/ReTrim/
 
-#reference genome file (if there is no reference genome check bwa manual for de novo alignment)
+#reference genome file (if there is no reference genome check stacks manual for de novo alignment)
 bwa_db=Macro_genome.fna
 
 #align to genome
