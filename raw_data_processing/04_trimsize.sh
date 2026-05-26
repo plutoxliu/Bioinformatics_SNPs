@@ -7,7 +7,7 @@
 #SBATCH --error TrimSize.%j.err # CHANGE each run
 
 module load cutadapt/4.4-gimkl-2022a-Python-3.11.3
-###make sure to QC before trimming to get a sense of the mean sequence length
+###make sure to QC (fastqc and multiqc) before trimming to get a sense of the mean sequence length, and clean up samples with zero reads (i.e. delete them from the pop.txt and sample.txt file)
 #-l trim length
 #-o output name
 #-m minimum length
