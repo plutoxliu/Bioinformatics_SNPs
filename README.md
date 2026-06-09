@@ -1,7 +1,7 @@
 ## Overview
 This repository contains detailed steps to analyse Genotyping-by-Sequencing (GBS) data.<br>
 For usage please see detailed comments in each file <br>
-I would appretiate acknowledgement or citation (once the manuscipt is accepted will be mentioned here) if using this repository
+I would appretiate acknowledgement or citation (Liu et al. 2026 in press) if using this repository
 <br><br>
 ## Before analyses
 - Genetic extractions and GBS library preparations steps are not described here, as they are subject to individual protocols and species. Deails for our preparations will be uploaded once the manuscript is accepted.
